@@ -9,8 +9,7 @@ RUN apt-get update && \
 ENV LDAP_CONFIGPASS=secret \
     LDAP_ROOTPASS=secret \
     LDAP_ORGANISATION=dcm4che.org \
-    LDAP_DOMAIN=example.com \
-    LDAP_BASE_DN="dc=example,dc=com"
+    LDAP_BASE_DN=dc=dcm4che,dc=org
 
 VOLUME /var/lib/ldap
 VOLUME /etc/ldap/slapd.d

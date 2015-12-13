@@ -3,11 +3,15 @@
 set -x
 : LDAP_CONFIGPASS=${LDAP_CONFIGPASS}
 : LDAP_ROOTPASS=${LDAP_ROOTPASS}
-: LDAP_DOMAIN=${LDAP_DOMAIN}
 : LDAP_ORGANISATION=${LDAP_ORGANISATION}
 : LDAP_BASE_DN=${LDAP_BASE_DN}
 
 if [ ! -e /var/lib/ldap/docker_bootstrapped ]; then
+
+	LDAP_DOMAIN=$(sed -e s/^dc=// -e s/,dc=/./g<<-EOF
+		${LDAP_BASE_DN}
+		EOF
+		)
 
 	cat <<- EOF | debconf-set-selections
 		slapd slapd/internal/generated_adminpw password ${LDAP_ROOTPASS}
