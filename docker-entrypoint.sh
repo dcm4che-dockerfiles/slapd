@@ -6,7 +6,7 @@ set -x
 : LDAP_ORGANISATION=${LDAP_ORGANISATION}
 : LDAP_BASE_DN=${LDAP_BASE_DN}
 
-if [ ! -e /var/lib/ldap/docker_bootstrapped ]; then
+if [ ! -e /etc/ldap/docker_bootstrapped ]; then
 
 	LDAP_DOMAIN=$(sed -e s/^dc=// -e s/,dc=/./g<<-EOF
 		${LDAP_BASE_DN}
@@ -48,7 +48,7 @@ if [ ! -e /var/lib/ldap/docker_bootstrapped ]; then
 
 	sleep 2
 
-	touch /var/lib/ldap/docker_bootstrapped
+	touch /etc/ldap/docker_bootstrapped
 fi
 
 ulimit -n 1024
