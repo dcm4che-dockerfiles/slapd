@@ -6,7 +6,7 @@ set -x
 : LDAP_ORGANISATION=${LDAP_ORGANISATION}
 : LDAP_BASE_DN=${LDAP_BASE_DN}
 
-if [ ! -f /etc/ldap/slapd.d/cn\=config.ldif ]; then
+if [ ! -f /etc/ldap/slapd.d/cn\=config.ldif ] || [ ! -f /var/lib/ldap/DB_CONFIG ]; then
 
 	LDAP_DOMAIN=$(sed -e s/^dc=// -e s/,dc=/./g<<-EOF
 		${LDAP_BASE_DN}

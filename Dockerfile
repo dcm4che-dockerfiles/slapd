@@ -3,7 +3,7 @@ FROM debian:jessie
 RUN apt-get update && \
     LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y ldap-utils slapd && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /etc/ldap/slapd.d/*
 
 # Default configuration: can be overridden at the docker command line
 ENV LDAP_CONFIGPASS=secret \
@@ -11,10 +11,10 @@ ENV LDAP_CONFIGPASS=secret \
     LDAP_ORGANISATION=dcm4che.org \
     LDAP_BASE_DN=dc=dcm4che,dc=org
 
-VOLUME /var/lib/ldap
-VOLUME /etc/ldap/slapd.d
+VOLUME [ "/var/lib/ldap", "/etc/ldap/slapd.d" ]
 
 COPY docker-entrypoint.sh /
+COPY unldif.sed /usr/bin
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
