@@ -1,5 +1,8 @@
 FROM debian:jessie
 
+# explicitly set user/group IDs
+RUN groupadd -r openldap --gid=1021 && useradd -r -g openldap --uid=1021 openldap
+
 RUN apt-get update && \
     LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y ldap-utils slapd && \
     apt-get clean && \
