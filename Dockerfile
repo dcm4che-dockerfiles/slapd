@@ -17,7 +17,7 @@ ENV LDAP_CONFIGPASS=secret \
 VOLUME [ "/var/lib/ldap", "/etc/ldap/slapd.d" ]
 
 COPY docker-entrypoint.sh /
-COPY usr /usr
+COPY unldif.sed /usr/bin
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
