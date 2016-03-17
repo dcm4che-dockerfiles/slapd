@@ -28,7 +28,7 @@ if [ "$1" = 'slapd' ]; then
 
 		dpkg-reconfigure -f noninteractive slapd
 
-		slapd -h "ldapi:/// ldap:///" -u openldap -g openldap
+		slapd -h ldapi:/// -u openldap -g openldap
 
 		ldapmodify -Y EXTERNAL -H ldapi:/// <<- EOF
 			dn: olcDatabase={0}config,cn=config
