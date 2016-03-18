@@ -44,8 +44,8 @@ if [ "$1" = 'slapd' ]; then
 			olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" manage by * none
 			EOF
 
-		if [ -f /etc/ldap/configure ]; then
-			. /etc/ldap/configure
+		if [ -f /etc/ldap/configure.sh ]; then
+			. /etc/ldap/configure.sh
 		fi
 
 		killall slapd
