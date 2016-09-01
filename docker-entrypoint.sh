@@ -37,15 +37,24 @@ if [ "$1" = 'slapd' ]; then
 			olcRootPW: $(slappasswd -s ${LDAP_CONFIGPASS})
 			EOF
 
-		ldapmodify -Y EXTERNAL -H ldapi:/// <<- EOF
-			dn: olcDatabase={1}hdb,cn=config
-			changetype: modify
-			add: olcAccess
-			olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" manage by * none
+		if [ -f /etc/ldap/configure.sh ]; then
+
+			ldapmodify -Y EXTERNAL -H ldapi:/// <<- EOF
+				dn: olcDatabase={1}hdb,cn=config
+				changetype: modify
+				add: olcAccess
+				olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
+				EOF
+
+			. /etc/ldap/configure.sh
+
+			ldapmodify -Y EXTERNAL -H ldapi:/// <<- EOF
+				dn: olcDatabase={1}hdb,cn=config
+				changetype: modify
+				delete: olcAccess
+				olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
 			EOF
 
-		if [ -f /etc/ldap/configure.sh ]; then
-			. /etc/ldap/configure.sh
 		fi
 
 		killall slapd
