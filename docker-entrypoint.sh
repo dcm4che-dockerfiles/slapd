@@ -62,6 +62,8 @@ if [ "$1" = 'slapd' ]; then
 		sleep 2
 	fi
 
+	set -- "$@" -h "ldap://$HOSTNAME/ ldap://127.0.0.1/"
+
 	ulimit -n 1024
 fi
 

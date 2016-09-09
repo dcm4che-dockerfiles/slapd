@@ -12,12 +12,15 @@ RUN apt-get update && \
 ENV LDAP_CONFIGPASS=secret \
     LDAP_ROOTPASS=secret \
     LDAP_ORGANISATION=dcm4che.org \
-    LDAP_BASE_DN=dc=dcm4che,dc=org
+    LDAP_BASE_DN=dc=dcm4che,dc=org \
+    LDAP_REPLICATION_HOSTS= \
+    LDAP_REPLICATION_DB_SYNCPROV='binddn="cn=admin,$LDAP_BASE_DN" bindmethod=simple credentials=$LDAP_ROOTPASS searchbase="$LDAP_BASE_DN" type=refreshOnly interval=00:00:00:10 retry="5 5 300 +" timeout=1'
 
 VOLUME [ "/var/lib/ldap", "/etc/ldap/slapd.d" ]
 
 COPY docker-entrypoint.sh /
-COPY unldif.sed /usr/bin/unldif.sed
+COPY ldap /etc/ldap
+COPY bin /usr/bin
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -f /etc/ldap/data/disable-replication.ldif

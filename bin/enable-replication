@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+if [ -z "$LDAP_REPLICATION_HOSTS" ]; then
+	echo "Missing LDAP_REPLICATION_HOSTS"
+	exit -1;
+fi
+
+if [ -f /etc/ldap/data/prepare-replication.ldif.tpl ]; then
+	echo "run prepare-replication before"
+	exit -1;
+fi
+
+if [ -f /etc/ldap/data/enable-replication.ldif.tpl ]; then
+	mv /etc/ldap/data/enable-replication.ldif.tpl /etc/ldap/data/enable-replication.ldif
+	i=1
+	for host in $LDAP_REPLICATION_HOSTS; do
+		sed -e "s|{{ LDAP_REPLICATION_HOSTS_DB_SYNC_REPL }}|olcSyncRepl: rid=10$i provider=${host} ${LDAP_REPLICATION_DB_SYNCPROV}\n{{ LDAP_REPLICATION_HOSTS_DB_SYNC_REPL }}|g" \
+			-i /etc/ldap/data/enable-replication.ldif
+		((i++))
+	done
+	sed -e "s|\$LDAP_BASE_DN|$LDAP_BASE_DN|g" \
+		-e "s|\$LDAP_ROOTPASS|$LDAP_ROOTPASS|g" \
+		-e "/{{ LDAP_REPLICATION_HOSTS_DB_SYNC_REPL }}/d" \
+		-i /etc/ldap/data/enable-replication.ldif
+fi
+
+ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -f /etc/ldap/data/enable-replication.ldif
