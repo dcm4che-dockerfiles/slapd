@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 
 # explicitly set user/group IDs
 RUN groupadd -r openldap --gid=1021 && useradd -r -g openldap --uid=1021 openldap
