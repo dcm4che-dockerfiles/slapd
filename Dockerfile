@@ -21,19 +21,7 @@ ENV LDAP_CONFIGPASS=secret \
     LDAP_TLS_VERIFY=never \
     LDAP_TLS_REQCERT=never \
     LDAP_REPLICATION_HOSTS= \
-    LDAP_REPLICATION_DB_SYNCPROV=\
-binddn=\"cn=admin,$LDAP_BASE_DN\" \
-bindmethod=simple \
-credentials=$LDAP_ROOTPASS \
-searchbase=\"$LDAP_BASE_DN\" \
-tls_cert=$LDAP_TLS_CERT \
-tls_key=$LDAP_TLS_KEY \
-tls_cacert=$LDAP_TLS_CACERT \
-tls_reqcert=$LDAP_TLS_REQCERT \
-type=refreshOnly \
-interval=00:00:00:10 \
-retry=\"5 5 300 +\" \
-timeout=1
+    LDAP_REPLICATION_DB_SYNCPROV='binddn="cn=admin,$LDAP_BASE_DN" bindmethod=simple credentials=$LDAP_ROOTPASS searchbase="$LDAP_BASE_DN" tls_cert=$LDAP_TLS_CERT tls_key=$LDAP_TLS_KEY tls_cacert=$LDAP_TLS_CACERT tls_reqcert=$LDAP_TLS_REQCERT type=refreshOnly interval=00:00:00:10 retry="5 5 300 +" timeout=1'
 
 VOLUME [ "/var/lib/ldap", "/etc/ldap/slapd.d" ]
 
