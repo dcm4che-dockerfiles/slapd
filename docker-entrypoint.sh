@@ -47,16 +47,16 @@ if [ "$1" = 'slapd' ]; then
 
 			dn: cn=config
 			add: olcTLSCACertificateFile
-			olcTLSCACertificateFile: $LDAP_TLS_CA_FILE
+			olcTLSCACertificateFile: $LDAP_TLS_CACERT
 			-
 			add: olcTLSCertificateFile
-			olcTLSCertificateFile: $LDAP_TLS_CERT_FILE
+			olcTLSCertificateFile: $LDAP_TLS_CERT
 			-
 			add: olcTLSCertificateKeyFile
-			olcTLSCertificateKeyFile: $LDAP_TLS_KEY_FILE
+			olcTLSCertificateKeyFile: $LDAP_TLS_KEY
 			-
 			add: olcTLSVerifyClient
-			olcTLSVerifyClient: $LDAP_TLS_VERIFY_CLIENT
+			olcTLSVerifyClient: $LDAP_TLS_VERIFY
 			EOF
 
 		if [ -f /etc/ldap/configure.sh ]; then
