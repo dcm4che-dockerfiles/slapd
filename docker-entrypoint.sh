@@ -82,7 +82,7 @@ if [ "$1" = 'slapd' ]; then
 			EOF
 	fi
 
-	set -- "$@" -h "ldap://$HOSTNAME/ ldap://127.0.0.1/ ldaps://$HOSTNAME/ ldaps://127.0.0.1/"
+	set -- "$@" -h "$LDAP_URLS"
 
 	ulimit -n 1024
 fi
