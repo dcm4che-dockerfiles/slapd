@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+LDAP_CONFIGPASS=`cat $LDAP_CONFIGPASS_FILE`
+
 if [ -z "$LDAP_REPLICATION_HOSTS" ]; then
 	echo "Missing LDAP_REPLICATION_HOSTS"
 	exit -1;

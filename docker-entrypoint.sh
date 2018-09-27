@@ -4,12 +4,16 @@ set -e
 
 if [ "$1" = 'slapd' ]; then
 
-	if [ -n "$LDAP_ROOTPASS_FILE" ] && [ -f $LDAP_ROOTPASS_FILE ]; then
-		LDAP_ROOTPASS=$(cat $LDAP_ROOTPASS_FILE)
+	if [ -f $LDAP_ROOTPASS_FILE ]; then
+		LDAP_ROOTPASS=`cat $LDAP_ROOTPASS_FILE`
+	else
+		echo $LDAP_ROOTPASS > $LDAP_ROOTPASS_FILE
 	fi
 
-	if  [ -n "$LDAP_CONFIGPASS_FILE" ] && [ -f $LDAP_CONFIGPASS_FILE ]; then
-		LDAP_CONFIGPASS=$(cat $LDAP_CONFIGPASS_FILE)
+	if  [ -f $LDAP_CONFIGPASS_FILE ]; then
+		LDAP_CONFIGPASS=`cat $LDAP_CONFIGPASS_FILE`
+	else
+		echo $LDAP_CONFIGPASS > $LDAP_CONFIGPASS_FILE
 	fi
 
 	if [ ! -f /etc/ldap/slapd.d/cn\=config.ldif ] || [ ! -f /var/lib/ldap/DB_CONFIG ]; then
@@ -66,6 +70,16 @@ if [ "$1" = 'slapd' ]; then
 		killall slapd
 
 		sleep 2
+	fi
+
+	if [ ! -f /etc/ldap/ldap.conf.done ]; then
+		touch /etc/ldap/ldap.conf.done
+		cat > /etc/ldap/ldap.conf <<- EOF
+			TLS_CERT	$LDAP_TLS_CERT
+			TLS_KEY	$LDAP_TLS_KEY
+			TLS_CACERT	$LDAP_TLS_CACERT
+			TLS_REQCERT	$LDAP_TLS_REQCERT
+			EOF
 	fi
 
 	set -- "$@" -h "ldap://$HOSTNAME/ ldap://127.0.0.1/ ldaps://$HOSTNAME/ ldaps://127.0.0.1/"

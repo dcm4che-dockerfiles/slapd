@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+LDAP_ROOTPASS=`cat $LDAP_ROOTPASS_FILE`
+
 ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config << EOF
 dn: cn=config
 replace: olcTLSCACertificateFile
