@@ -15,7 +15,7 @@ ENV LDAP_CONFIGPASS=secret \
     LDAP_ROOTPASS_FILE=/tmp/ldap_rootpass \
     LDAP_ORGANISATION=dcm4che.org \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
-    LDAP_URLS="ldap:/// ldaps:///" \
+    LDAP_URLS="ldap:///" \
     LDAP_TLS_CACERT=/etc/certs/cacert.pem \
     LDAP_TLS_CERT=/etc/certs/cert.pem \
     LDAP_TLS_KEY=/etc/certs/key.pem \
