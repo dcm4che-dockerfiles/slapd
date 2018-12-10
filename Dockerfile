@@ -6,7 +6,7 @@ RUN groupadd -r openldap --gid=1021 && useradd -r -g openldap --uid=1021 openlda
 RUN apt-get update && \
     LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ca-certificates \
-        curl \
+        wget \
         ldap-utils \
         slapd \
     && apt-get clean \
