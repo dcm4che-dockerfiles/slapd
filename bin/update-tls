@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-LDAP_ROOTPASS=`cat $LDAP_ROOTPASS_FILE`
+. setenv.sh
 
 ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config << EOF
 dn: cn=config

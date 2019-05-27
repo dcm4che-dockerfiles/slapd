@@ -4,17 +4,7 @@ set -e
 
 if [ "$1" = 'slapd' ]; then
 
-	if [ -f $LDAP_ROOTPASS_FILE ]; then
-		LDAP_ROOTPASS=`cat $LDAP_ROOTPASS_FILE`
-	else
-		echo $LDAP_ROOTPASS > $LDAP_ROOTPASS_FILE
-	fi
-
-	if  [ -f $LDAP_CONFIGPASS_FILE ]; then
-		LDAP_CONFIGPASS=`cat $LDAP_CONFIGPASS_FILE`
-	else
-		echo $LDAP_CONFIGPASS > $LDAP_CONFIGPASS_FILE
-	fi
+	. setenv.sh
 
 	if [ ! -f /etc/ldap/slapd.d/cn\=config.ldif ] || [ ! -f /var/lib/ldap/DB_CONFIG ]; then
 
