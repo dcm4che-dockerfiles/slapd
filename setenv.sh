@@ -1,26 +1,27 @@
-#!/bin/bash
+#!/bin/sh
 
-# usage: file_env VAR [DEFAULT]
-#    ie: file_env 'XYZ_DB_PASSWORD' 'example'
-# (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
-#  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
-file_env() {
-    local var="$1"
-    local fileVar="${var}_FILE"
-    local def="${2:-}"
-    if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
-        echo >&2 "error: both $var and $fileVar are set (but are exclusive)"
-        exit 1
-    fi
-    local val="$def"
-    if [ "${!var:-}" ]; then
-        val="${!var}"
-    elif [ "${!fileVar:-}" ]; then
-        val="$(< "${!fileVar}")"
-    fi
-    export "$var"="$val"
-    unset "$fileVar"
-}
+if [ "${LDAP_ROOTPASS:-}" ]; then
+  if [ "${LDAP_ROOTPASS_FILE:-}" ]; then
+    echo >&2 "error: both LDAP_ROOTPASS and LDAP_ROOTPASS_FILE are set (but are exclusive)"
+    exit 1
+  fi
+elif [ "${LDAP_ROOTPASS_FILE:-}" ]; then
+  LDAP_ROOTPASS="$(< "${LDAP_ROOTPASS_FILE}")"
+  unset LDAP_ROOTPASS_FILE
+else
+  LDAP_ROOTPASS=secret
+fi
+export LDAP_ROOTPASS
 
-file_env 'LDAP_ROOTPASS' 'secret'
-file_env 'LDAP_CONFIGPASS' 'secret'
+if [ "${LDAP_CONFIGPASS:-}" ]; then
+  if [ "${LDAP_CONFIGPASS_FILE:-}" ]; then
+    echo >&2 "error: both LDAP_CONFIGPASS and LDAP_CONFIGPASS_FILE are set (but are exclusive)"
+    exit 1
+  fi
+elif [ "${LDAP_CONFIGPASS_FILE:-}" ]; then
+  LDAP_CONFIGPASS="$(< "${LDAP_CONFIGPASS_FILE}")"
+  unset LDAP_CONFIGPASS_FILE
+else
+  LDAP_CONFIGPASS=secret
+fi
+export LDAP_CONFIGPASS

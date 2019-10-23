@@ -1,80 +1,32 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
 if [ "$1" = 'slapd' ]; then
 
-	. setenv.sh
+  . setenv.sh
 
-	if [ ! -f /etc/ldap/slapd.d/cn\=config.ldif ] || [ ! -f /var/lib/ldap/DB_CONFIG ]; then
+  if [ ! -f /etc/openldap/slapd.d/cn\=config.ldif ]; then
+    [ -d /etc/openldap/slapd.d ] || mkdir /etc/openldap/slapd.d
+    . slapadd.sh
+    chown -R ldap:ldap /etc/openldap/slapd.d
+    chown -R ldap:ldap /var/lib/openldap/openldap-data
+    [ -f /etc/openldap/configure.sh ] && ( sleep 2; /etc/openldap/configure.sh )&
+  fi
 
-		LDAP_DOMAIN=$(sed -e s/^dc=// -e s/,dc=/./g <<< $LDAP_BASE_DN)
+  [ -d /run/openldap ] || mkdir /run/openldap && chown ldap:ldap /run/openldap
 
-		cat <<- EOF | debconf-set-selections
-			slapd slapd/internal/generated_adminpw password $LDAP_ROOTPASS
-			slapd slapd/internal/adminpw password $LDAP_ROOTPASS
-			slapd slapd/password2 password $LDAP_ROOTPASS
-			slapd slapd/password1 password $LDAP_ROOTPASS
-			slapd slapd/dump_database_destdir string /var/backups/slapd-VERSION
-			slapd slapd/domain string $LDAP_DOMAIN
-			slapd shared/organization string $LDAP_ORGANISATION
-			slapd slapd/backend string HDB
-			slapd slapd/purge_database boolean true
-			slapd slapd/move_old_database boolean true
-			slapd slapd/allow_ldap_v2 boolean false
-			slapd slapd/no_configuration boolean false
-			slapd slapd/dump_database select when needed
-			EOF
+  grep -q TLS /etc/openldap/ldap.conf || cat >>/etc/openldap/ldap.conf <<EOF
 
-		dpkg-reconfigure -f noninteractive slapd
+TLS_CERT	$LDAP_TLS_CERT
+TLS_KEY		$LDAP_TLS_KEY
+TLS_CACERT	$LDAP_TLS_CACERT
+TLS_REQCERT	$LDAP_TLS_REQCERT
+EOF
 
-		slapd -h ldapi:/// -u openldap -g openldap
+  set -- "$@" -h "$LDAP_URLS"
 
-		ldapmodify -Y EXTERNAL -H ldapi:/// <<- EOF
-			dn: olcDatabase={0}config,cn=config
-			add: olcRootPW
-			olcRootPW: $(slappasswd -s $LDAP_CONFIGPASS)
-
-			dn: olcDatabase={1}hdb,cn=config
-			add: olcAccess
-			olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
-
-			dn: cn=config
-			add: olcTLSCACertificateFile
-			olcTLSCACertificateFile: $LDAP_TLS_CACERT
-			-
-			add: olcTLSCertificateFile
-			olcTLSCertificateFile: $LDAP_TLS_CERT
-			-
-			add: olcTLSCertificateKeyFile
-			olcTLSCertificateKeyFile: $LDAP_TLS_KEY
-			-
-			add: olcTLSVerifyClient
-			olcTLSVerifyClient: $LDAP_TLS_VERIFY
-			EOF
-
-		if [ -f /etc/ldap/configure.sh ]; then
-			. /etc/ldap/configure.sh
-		fi
-
-		killall slapd
-
-		sleep 2
-	fi
-
-	if [ ! -f /etc/ldap/ldap.conf.done ]; then
-		touch /etc/ldap/ldap.conf.done
-		cat > /etc/ldap/ldap.conf <<- EOF
-			TLS_CERT	$LDAP_TLS_CERT
-			TLS_KEY	$LDAP_TLS_KEY
-			TLS_CACERT	$LDAP_TLS_CACERT
-			TLS_REQCERT	$LDAP_TLS_REQCERT
-			EOF
-	fi
-
-	set -- "$@" -h "$LDAP_URLS"
-
-	ulimit -n 1024
+  ulimit -n 1024
 fi
 
 exec "$@"

@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 . setenv.sh
 
-ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -f /etc/ldap/data/disable-replication.ldif
+ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -f /etc/openldap/data/disable-replication.ldif

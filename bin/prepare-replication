@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 if [ -z "$LDAP_REPLICATION_HOSTS" ]; then
     echo "Missing LDAP_REPLICATION_HOSTS"
@@ -7,17 +7,17 @@ fi
 
 . setenv.sh
 
-if [ -f /etc/ldap/data/prepare-replication.ldif.tpl ]; then
-    mv /etc/ldap/data/prepare-replication.ldif.tpl /etc/ldap/data/prepare-replication.ldif
+if [ -f /etc/openldap/data/prepare-replication.ldif.tpl ]; then
+    mv /etc/openldap/data/prepare-replication.ldif.tpl /etc/openldap/data/prepare-replication.ldif
     i=1
     for host in $LDAP_REPLICATION_HOSTS; do
         sed -e "s|{{ LDAP_REPLICATION_HOSTS }}|olcServerID: $i ${host}\n{{ LDAP_REPLICATION_HOSTS }}|g" \
-            -i /etc/ldap/data/prepare-replication.ldif
-        ((i++))
+            -i /etc/openldap/data/prepare-replication.ldif
+        ((i=i+1))
     done
     sed -e "s|\$LDAP_BASE_DN|$LDAP_BASE_DN|g" \
         -e "/{{ LDAP_REPLICATION_HOSTS }}/d" \
-        -i /etc/ldap/data/prepare-replication.ldif
+        -i /etc/openldap/data/prepare-replication.ldif
 fi
 
-ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -f /etc/ldap/data/prepare-replication.ldif
+ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -f /etc/openldap/data/prepare-replication.ldif
