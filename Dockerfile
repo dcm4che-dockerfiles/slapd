@@ -3,7 +3,8 @@ FROM alpine:3.10
 RUN apk --no-cache --update add openldap openldap-back-mdb openldap-overlay-syncprov openldap-clients && \
     deluser ldap && \
     addgroup -g 1021 -S ldap && \
-    adduser -u 1021 -D -S -h /usr/lib/openldap -s /sbin/nologin -g 'OpenLDAP User' -G ldap ldap
+    adduser -u 1021 -D -S -h /usr/lib/openldap -s /sbin/nologin -g 'OpenLDAP User' -G ldap ldap && \
+    chown -R ldap:ldap /var/lib/openldap
 
 ENV LDAP_ORGANISATION=dcm4che.org \
     LDAP_BASE_DN=dc=dcm4che,dc=org \
