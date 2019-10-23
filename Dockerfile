@@ -5,7 +5,8 @@ RUN apk --no-cache --update add openldap openldap-back-mdb openldap-overlay-sync
     addgroup -g 1021 -S ldap && \
     adduser -u 1021 -D -S -h /usr/lib/openldap -s /sbin/nologin -g 'OpenLDAP User' -G ldap ldap
 
-ENV LDAP_BASE_DN=dc=dcm4che,dc=org \
+ENV LDAP_ORGANISATION=dcm4che.org \
+    LDAP_BASE_DN=dc=dcm4che,dc=org \
     LDAP_URLS="ldap:///" \
     LDAP_TLS_CACERT=/etc/certs/cacert.pem \
     LDAP_TLS_CERT=/etc/certs/cert.pem \
