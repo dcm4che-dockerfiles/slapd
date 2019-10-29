@@ -102,7 +102,6 @@ objectClass: olcMdbConfig
 olcDatabase: mdb
 olcAccess: to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
 olcAccess: to attrs=userPassword by self write by anonymous auth by * none
-olcAccess: to attrs=shadowLastChange by self write by * read
 olcAccess: to * by * read
 olcSuffix: ${LDAP_BASE_DN}
 olcRootDN: cn=admin,${LDAP_BASE_DN}
