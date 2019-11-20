@@ -13,11 +13,11 @@ if [ -f /etc/openldap/data/prepare-replication.ldif.tpl ]; then
     for host in $LDAP_REPLICATION_HOSTS; do
         sed -e "s|{{ LDAP_REPLICATION_HOSTS }}|olcServerID: $i ${host}\n{{ LDAP_REPLICATION_HOSTS }}|g" \
             -i /etc/openldap/data/prepare-replication.ldif
-        ((i=i+1))
+        i=$((i+1))
     done
     sed -e "s|\$LDAP_BASE_DN|$LDAP_BASE_DN|g" \
         -e "/{{ LDAP_REPLICATION_HOSTS }}/d" \
         -i /etc/openldap/data/prepare-replication.ldif
 fi
 
-ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -f /etc/openldap/data/prepare-replication.ldif
+ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -H $LDAP_URLS -f /etc/openldap/data/prepare-replication.ldif
