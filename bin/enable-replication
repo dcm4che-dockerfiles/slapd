@@ -29,4 +29,4 @@ if [ -f /etc/openldap/data/enable-replication.ldif.tpl ]; then
         -i /etc/openldap/data/enable-replication.ldif
 fi
 
-ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -H $LDAP_URLS -f /etc/openldap/data/enable-replication.ldif
+ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -H "$LDAP_URLS" -f /etc/openldap/data/enable-replication.ldif
