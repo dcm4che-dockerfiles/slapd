@@ -119,4 +119,5 @@ olcDbDirectory:	/var/lib/openldap/openldap-data
 #
 # Indices to maintain
 olcDbIndex: objectClass eq
+olcDbIndex: cn,uid eq
 EOF
