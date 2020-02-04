@@ -101,6 +101,7 @@ dn: olcDatabase=mdb,cn=config
 objectClass: olcDatabaseConfig
 objectClass: olcMdbConfig
 olcDatabase: mdb
+olcDbMaxSize: 1073741824
 olcAccess: to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
 olcAccess: to attrs=userPassword by self write by anonymous auth by * none
 olcAccess: to * by * read
