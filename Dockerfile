@@ -1,6 +1,6 @@
 FROM alpine:3.11.3
 
-RUN apk --no-cache --update add openldap openldap-back-mdb openldap-overlay-syncprov openldap-clients
+RUN apk --no-cache --update add zip openldap openldap-back-mdb openldap-overlay-syncprov openldap-clients
 
 ENV LDAP_USER_ID=1021 \
     LDAP_GROUP_ID=1021 \
