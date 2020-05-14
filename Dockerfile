@@ -1,4 +1,4 @@
-FROM alpine:3.11.3
+FROM alpine:3.11.6
 
 RUN apk --no-cache --update add zip openldap openldap-back-mdb openldap-overlay-syncprov openldap-clients
 
@@ -11,7 +11,8 @@ ENV LDAP_USER_ID=1021 \
     LDAP_TLS_CERT=/etc/certs/cert.pem \
     LDAP_TLS_KEY=/etc/certs/key.pem \
     LDAP_TLS_VERIFY=never \
-    LDAP_TLS_REQCERT=never
+    LDAP_TLS_REQCERT=never \
+    LDAP_DEBUG=32768
 
 VOLUME [ "/var/lib/openldap/openldap-data", "/etc/openldap/slapd.d" ]
 
@@ -23,4 +24,4 @@ COPY bin /usr/bin
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 389
-CMD ["slapd", "-d", "32768", "-u", "ldap", "-g", "ldap"]
+CMD ["slapd", "-u", "ldap", "-g", "ldap"]

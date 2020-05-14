@@ -31,7 +31,7 @@ TLS_CACERT	$LDAP_TLS_CACERT
 TLS_REQCERT	$LDAP_TLS_REQCERT
 EOF
 
-  set -- "$@" -h "$LDAP_URLS"
+  set -- "$@" -d "$LDAP_DEBUG" -h "$LDAP_URLS"
 
   ulimit -n 1024
 fi
