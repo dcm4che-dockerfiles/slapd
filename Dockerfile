@@ -1,4 +1,4 @@
-FROM alpine:3.11.6
+FROM alpine:3.12.0
 
 RUN apk --no-cache --update add zip openldap openldap-back-mdb openldap-overlay-syncprov openldap-clients
 
