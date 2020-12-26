@@ -6,7 +6,7 @@ if [ "$1" = 'slapd' ]; then
 
   . setenv.sh
 
-  if [ ! $(getent passwd $LDAP_USER_ID > /dev/null) ]; then
+  if ! $(getent passwd $LDAP_USER_ID > /dev/null); then
     deluser ldap
     addgroup -g $LDAP_GROUP_ID -S ldap
     adduser -u $LDAP_USER_ID -D -S -h /usr/lib/openldap -s /sbin/nologin -g 'OpenLDAP User' -G ldap ldap
@@ -16,6 +16,8 @@ if [ "$1" = 'slapd' ]; then
   if [ ! -f /etc/openldap/slapd.d/cn\=config.ldif ]; then
     [ -d /etc/openldap/slapd.d ] || mkdir /etc/openldap/slapd.d
     . slapadd.sh
+    chown ldap:ldap /etc/openldap/slapd.conf
+    chown ldap:ldap /etc/openldap/slapd.ldif
     chown -R ldap:ldap /etc/openldap/slapd.d
     chown -R ldap:ldap /var/lib/openldap/openldap-data
     [ -f /etc/openldap/configure.sh ] && ( sleep 2; /etc/openldap/configure.sh )&
