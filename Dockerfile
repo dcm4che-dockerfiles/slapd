@@ -16,7 +16,7 @@ ENV LDAP_USER_ID=1021 \
 
 VOLUME [ "/var/lib/openldap/openldap-data", "/etc/openldap/slapd.d" ]
 
-COPY docker-entrypoint.sh setenv.sh slapadd.sh /
+COPY docker-entrypoint.sh slapadd.sh /
 COPY ldap /etc/openldap
 COPY certs /etc/certs
 COPY bin /usr/bin
