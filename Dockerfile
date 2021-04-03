@@ -1,4 +1,4 @@
-FROM alpine:3.13.2
+FROM alpine:3.12
 
 RUN apk --no-cache --update add zip openldap openldap-back-mdb openldap-overlay-syncprov openldap-clients
 
@@ -20,6 +20,7 @@ COPY docker-entrypoint.sh slapadd.sh /
 COPY ldap /etc/openldap
 COPY certs /etc/certs
 COPY bin /usr/bin
+RUN chown -R ldap:ldap /etc/openldap
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 

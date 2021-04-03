@@ -13,6 +13,8 @@ if [ "$1" = 'slapd' ]; then
     chown -R ldap:ldap /var/lib/openldap
   fi
 
+  chown -R ldap:ldap /etc/openldap/slapd.d
+
   if [ ! -f /etc/openldap/slapd.d/cn\=config.ldif ]; then
     [ -d /etc/openldap/slapd.d ] || mkdir /etc/openldap/slapd.d
     . slapadd.sh
@@ -39,3 +41,4 @@ EOF
 fi
 
 exec "$@"
+
