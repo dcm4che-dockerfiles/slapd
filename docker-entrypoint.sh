@@ -14,12 +14,8 @@ if [ "$1" = 'slapd' ]; then
   fi
 
   if [ ! -f /etc/openldap/slapd.d/cn\=config.ldif ]; then
-    [ -d /etc/openldap/slapd.d ] || mkdir /etc/openldap/slapd.d
-    . slapadd.sh
-    chown ldap:ldap /etc/openldap/slapd.conf
-    chown ldap:ldap /etc/openldap/slapd.ldif
-    chown -R ldap:ldap /etc/openldap/slapd.d
-    chown -R ldap:ldap /var/lib/openldap/openldap-data
+    chown ldap:ldap /etc/openldap/slapd.d
+    su -s /bin/sh ldap -c /slapadd.sh
     [ -f /etc/openldap/configure.sh ] && ( sleep 2; /etc/openldap/configure.sh )&
   fi
 
