@@ -2,7 +2,7 @@
 
 . setenv.sh
 
-ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -H "$LDAP_URLS" << EOF
+ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -H "$LDAP_URLS" $@ << EOF
 dn: cn=config
 replace: olcTLSCACertificateFile
 olcTLSCACertificateFile: $LDAP_TLS_CACERT

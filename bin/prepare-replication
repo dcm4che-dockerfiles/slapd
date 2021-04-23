@@ -20,4 +20,4 @@ if [ -f /etc/openldap/data/prepare-replication.ldif.tpl ]; then
         -i /etc/openldap/data/prepare-replication.ldif
 fi
 
-ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -H "$LDAP_URLS" -f /etc/openldap/data/prepare-replication.ldif
+ldapmodify -xw $LDAP_CONFIGPASS -D cn=admin,cn=config -H "$LDAP_URLS" -f /etc/openldap/data/prepare-replication.ldif $@
