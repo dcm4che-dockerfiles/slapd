@@ -29,6 +29,9 @@ TLS_CACERT	$LDAP_TLS_CACERT
 TLS_REQCERT	$LDAP_TLS_REQCERT
 EOF
 
+  [ -n "$LDAP_EXTRA_HOST" ] && ! grep -q $LDAP_EXTRA_HOST /etc/hosts \
+  && echo $(hostname -i)$'\t'$LDAP_EXTRA_HOST >>/etc/hosts
+
   set -- "$@" -d "$LDAP_DEBUG" -h "$LDAP_URLS"
 
   ulimit -n 1024
