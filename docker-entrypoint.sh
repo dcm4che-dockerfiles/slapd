@@ -29,8 +29,14 @@ TLS_CACERT	$LDAP_TLS_CACERT
 TLS_REQCERT	$LDAP_TLS_REQCERT
 EOF
 
-  [ -n "$LDAP_EXTRA_HOST" ] && ! grep -q $LDAP_EXTRA_HOST /etc/hosts \
-  && echo $(hostname -i)$'\t'$LDAP_EXTRA_HOST >>/etc/hosts
+  if [ -n "$LDAP_EXTRA_HOST" ] && ! grep -q $LDAP_EXTRA_HOST /etc/hosts; then
+    if [ -n "$LDAP_EXTRA_HOST_IP_PREFIX" ]; then
+      IP=$(ip a | sed -e /$LDAP_EXTRA_HOST_IP_PREFIX/\!d -e 's%^[^1-9]*\([^/]*\).*%\1%')
+    else
+      IP=$(hostname -i)
+    fi
+    echo $IP$'\t'$LDAP_EXTRA_HOST >>/etc/hosts
+  fi
 
   set -- "$@" -d "$LDAP_DEBUG" -h "$LDAP_URLS"
 
