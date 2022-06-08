@@ -16,7 +16,7 @@ if [ "$1" = 'slapd' ]; then
   if [ ! -f /etc/openldap/slapd.d/cn\=config.ldif ]; then
     chown ldap:ldap /etc/openldap/slapd.d
     su -s /bin/sh ldap -c /slapadd.sh
-    [ -f /etc/openldap/configure.sh ] && ( sleep 2; /etc/openldap/configure.sh )&
+    [ -n "$LDAP_INIT_CMDS" ] && ( sleep 2; for CMD in $LDAP_INIT_CMDS; do $CMD; done )&
   fi
 
   [ -d /run/openldap ] || mkdir /run/openldap && chown ldap:ldap /run/openldap
